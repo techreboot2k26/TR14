@@ -810,13 +810,30 @@ def run_app_server():
     import time
     import threading
     import uvicorn
+    import httpx
     server_thread = threading.Thread(
         target=lambda: uvicorn.run(app, host="127.0.0.1", port=5005, log_level="error"),
         daemon=True
     )
     server_thread.start()
-    time.sleep(0.5)  # Let server bind and start
-    yield "http://127.0.0.1:5005"
+    
+    server_url = "http://127.0.0.1:5005"
+    ready = False
+    start_time = time.time()
+    while time.time() - start_time < 5.0:
+        try:
+            res = httpx.get(f"{server_url}/api/health", timeout=0.5)
+            if res.status_code == 200:
+                ready = True
+                break
+        except Exception:
+            pass
+        time.sleep(0.05)
+    
+    if not ready:
+        raise RuntimeError("Test server failed to start within timeout")
+
+    yield server_url
 
 def test_socket_real_time_events(run_app_server):
     import time
