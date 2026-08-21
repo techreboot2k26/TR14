@@ -122,6 +122,7 @@ const ProtectedStudentRoute: React.FC<{ children: React.ReactNode }> = ({ childr
     return <Navigate to="/login" replace />;
   }
 
+  
   if (user?.role !== 'STUDENT') {
     return (
       <div style={{
