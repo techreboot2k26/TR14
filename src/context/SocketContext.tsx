@@ -7,6 +7,8 @@ interface SocketContextType {
   isConnected: boolean;
 }
 
+
+
 const SocketContext = createContext<SocketContextType>({
   socket: null,
   isConnected: false,

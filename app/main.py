@@ -10,6 +10,8 @@ from app.config import settings
 from app.database import initialize_schema, seed_database
 from app.routers import student, staff, admin
 
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """

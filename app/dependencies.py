@@ -10,10 +10,10 @@ def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: sqlite3.Connection = Depends(get_db)
 ) -> dict:
-    """
-    Extracts Bearer token, verifies via local JWT validation (with mock fallback),
-    resolves identity from SQLite database, and auto-syncs user profile if missing.
-    """
+   
+
+
+   
     if not credentials or not credentials.credentials:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
