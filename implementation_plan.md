@@ -6,6 +6,9 @@ Implement the complete functional Admin + Authentication + Analytics module for 
 
 ### [Backend Components]
 
+
+
+
 #### [NEW] [admin.ts](file:///c:/Users/USER/Desktop/gitrush/TR01/server/routes/admin.ts)
 - Create `/api/admin` router.
 - Protect all route handlers using `authenticateToken` and `requireRole(['ADMIN'])`.

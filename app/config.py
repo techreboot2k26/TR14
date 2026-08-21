@@ -24,5 +24,10 @@ class Settings(BaseSettings):
         extra="ignore"
     )
 
+
+
+
+    
+
 # Instantiate settings
 settings = Settings()
