@@ -309,7 +309,7 @@ export const StaffDashboardPage: React.FC = () => {
     avg_service_time_minutes: 0,
   };
 
-  const heldTokens = waitingQueue.filter((t) => t.status === 'HELD');
+  const heldTokens = dashboardData?.held_tokens || [];
 
   return (
     <div className="app-container">

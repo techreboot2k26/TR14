@@ -85,6 +85,24 @@ describe('Staff Queue Operations Module Integration & State Machine Tests', () =
       expect(res.body[0].token_number).toBe('LP-044');
       expect(res.body[0].priority).toBe('HIGH');
     });
+
+    it('should include HELD tokens separately so staff can resume them (Regression: BUG-002)', async () => {
+      const res = await request(app)
+        .get('/api/staff/dashboard')
+        .set('Authorization', `Bearer ${staffToken}`);
+
+      expect(res.status).toBe(200);
+      // held_count stat reports 1 (seeded LP-045), and held_tokens must actually
+      // contain that token so the staff UI can render a Resume action for it.
+      expect(res.body.stats.held_count).toBe(1);
+      expect(res.body.held_tokens).toBeDefined();
+      expect(res.body.held_tokens.length).toBe(1);
+      expect(res.body.held_tokens[0].token_number).toBe('LP-045');
+      expect(res.body.held_tokens[0].status).toBe('HELD');
+
+      // waiting_queue must NOT contain HELD tokens (it's WAITING-only by design)
+      expect(res.body.waiting_queue.every((t: any) => t.status === 'WAITING')).toBe(true);
+    });
   });
 
   // 3. QUEUE STATE MACHINE & OPERATIONS TESTS

@@ -562,6 +562,14 @@ export class DefaultQueueEngine implements IQueueEngine {
         return;
       }
 
+      // A token that is SERVING or HELD is bound to a specific counter; only the
+      // staff member operating that counter is allowed to skip it. WAITING tokens
+      // have no counter_id yet, so they are not counter-restricted.
+      if ((token.status === 'SERVING' || token.status === 'HELD') && token.counter_id !== counterId) {
+        errorMessage = 'Unauthorized: Token is assigned to a different counter';
+        return;
+      }
+
       const now = new Date().toISOString();
 
       db.prepare(`

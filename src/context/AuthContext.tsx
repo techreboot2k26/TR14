@@ -61,8 +61,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         body: JSON.stringify({ email, password }),
       });
       if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || 'Login failed');
+        let errorMsg = 'Login failed';
+        try {
+          const errData = await res.json();
+          errorMsg = errData.error || errData.message || errorMsg;
+        } catch {
+          const rawText = await res.text().catch(() => '');
+          errorMsg = rawText || `Server error (${res.status})`;
+        }
+        throw new Error(errorMsg);
       }
       const data = await res.json();
       setUser(data.user);

@@ -77,6 +77,7 @@ export interface StaffDashboardData {
   service: Service;
   current_token: Token | null;
   waiting_queue: Token[];
+  held_tokens: Token[];
   stats: OperationalStats;
 }
 

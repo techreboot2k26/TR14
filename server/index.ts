@@ -70,6 +70,15 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'QueueCraft Staff Operations Module', timestamp: new Date().toISOString() });
 });
 
+// JSON Error Handling Middleware for all /api routes
+app.use('/api', (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('[API Error]:', err);
+  const status = typeof err.status === 'number' ? err.status : (typeof err.statusCode === 'number' ? err.statusCode : 500);
+  res.status(status).json({
+    error: err.message || 'Internal server error'
+  });
+});
+
 // Serve frontend build in production
 const distPath = path.join(process.cwd(), 'dist');
 app.use(express.static(distPath));
