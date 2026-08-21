@@ -5,9 +5,7 @@
 **QueueCraft** is currently a university smart queue and counter management prototype.
 **Current Functionality:** The frontend provides a Student Dashboard, Staff Operations Dashboard, Admin Dashboard, Token Booking flow, Active Token tracking, and Service/Counter discovery.
 **Frontend vs Backend:** The frontend is mostly complete using React, Vite, and React Router. A Node.js/Express backend currently exists and serves as a functional mock/prototype.
-**Current Backend:** Written in TypeScript using Express, Socket.io, and `better-sqlite3`.
 **Database:** SQLite (`queuecraft.db`).
-**Frontend Expectations:** Expects REST APIs returning JSON, Firebase Authentication (or a compatible JWT mechanism) with localStorage tokens (`qc_token`), and Socket.io for real-time queue updates.
 **Python Migration:** The Node.js/Express backend needs to be entirely rewritten in Python, matching the REST endpoints, Socket.io events, and SQLite schema while preserving the exact API contracts the React frontend relies upon.
 **Major Architecture Risks:** Real-time Socket.io replacement in Python (requires FastAPI+python-socketio or similar), transaction atomicity during queue operations (FCFS logic, holding/skipping), and replicating the exact Firebase Auth payload parsing if the Python backend verifies Firebase tokens.
 **Major Dependencies:** React, Firebase Auth (Frontend), Socket.io, SQLite.

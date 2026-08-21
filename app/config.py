@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     mock_auth: bool = False
     jwt_secret: str = "queuecraft_jwt_secret_key_2026"
 
+
+
     @model_validator(mode="after")
     def validate_production_mock_auth(self) -> "Settings":
         if self.environment == "production" and self.mock_auth:
@@ -23,6 +25,8 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore"
     )
+
+
 
 # Instantiate settings
 settings = Settings()
