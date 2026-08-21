@@ -120,10 +120,9 @@ const ProtectedStudentRoute: React.FC<{ children: React.ReactNode }> = ({ childr
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
-  }
-
+  
   if (user?.role !== 'STUDENT') {
-    return (
+    return
       <div style={{
         minHeight: '100vh',
         display: 'flex',
