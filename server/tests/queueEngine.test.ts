@@ -13,6 +13,35 @@ describe('Smart Queue Engine Service Tests', () => {
     closeDb();
   });
 
+  // 0. SKIP OPERATION COUNTER OWNERSHIP (Regression: BUG-001)
+  describe('0. Skip Operation Counter Ownership', () => {
+    it('should reject skipping a SERVING token from a different counter', () => {
+      // tkn-041 is SERVING on cntr-lp-2; attempt to skip it "from" a different counter
+      const result = queueEngine.skipToken('tkn-041', 'cntr-cnt-1');
+      expect(result.success).toBe(false);
+      expect(result.error).toMatch(/Unauthorized/i);
+    });
+
+    it('should reject skipping a HELD token from a different counter', () => {
+      // tkn-045 is HELD, originally served on cntr-lp-2
+      const result = queueEngine.skipToken('tkn-045', 'cntr-cnt-1');
+      expect(result.success).toBe(false);
+      expect(result.error).toMatch(/Unauthorized/i);
+    });
+
+    it('should allow skipping a SERVING token from the correct counter', () => {
+      const result = queueEngine.skipToken('tkn-041', 'cntr-lp-2');
+      expect(result.success).toBe(true);
+      expect(result.token?.status).toBe('SKIPPED');
+    });
+
+    it('should allow skipping a WAITING token regardless of counter (no binding yet)', () => {
+      const result = queueEngine.skipToken('tkn-042', 'cntr-cnt-1');
+      expect(result.success).toBe(true);
+      expect(result.token?.status).toBe('SKIPPED');
+    });
+  });
+
   // 1. NORMAL FIFO QUEUE ORDERING
   describe('1. Normal FIFO Queue Ordering', () => {
     it('should order tokens of the same priority by created_at time (FIFO)', () => {

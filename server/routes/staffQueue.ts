@@ -19,6 +19,12 @@ function getDashboardData(counter: any) {
   const currentToken = queueEngine.getCurrentServingToken(counter.id);
   const waitingQueue = queueEngine.getWaitingQueue(counter.service_id);
 
+  // Held tokens (getWaitingQueue only returns status='WAITING' tokens, so HELD
+  // tokens must be fetched separately for the staff dashboard's resume UI)
+  const heldTokens = db.prepare(`
+    SELECT * FROM tokens WHERE service_id = ? AND status = 'HELD'
+  `).all(counter.service_id);
+
   // Operational stats calculations
   const heldCount = (db.prepare(`
     SELECT COUNT(*) as cnt FROM tokens WHERE service_id = ? AND status = 'HELD'
@@ -55,6 +61,7 @@ function getDashboardData(counter: any) {
     service,
     current_token: currentToken,
     waiting_queue: waitingQueue,
+    held_tokens: heldTokens,
     stats: {
       queue_length: waitingQueue.length,
       currently_serving_number: currentToken?.token_number || null,
